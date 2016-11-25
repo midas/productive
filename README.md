@@ -122,8 +122,6 @@ Using the same use case from above let's implement this pipeline using _producti
         step ReadFile
         step ExtractAbstractCodeChunks
         step WrapChunks
-
-        defp process_result(product, _opts), do: {:ok, product}
       end
       ```
 
@@ -137,15 +135,15 @@ Using the same use case from above let's implement this pipeline using _producti
         @unread "unread"
 
         # Block invalid start state
-        def do_determine_state(%{filepath: nil}, _opts), do: raise "filepath cannot be nil"
+        def prepare(%{filepath: nil}, _opts), do: raise "filepath cannot be nil"
 
         # Valid start states
-        def do_determine_state(%{file_contents: nil, filepath: _}, _opts), do: @unread
-        def do_determine_state(_product, _opts), do: @read
+        def prepare(%{file_contents: nil, filepath: _}, _opts), do: @unread
+        def prepare(_product, _opts), do: @read
 
-        def do_work(@read, product, _opts), do: product
+        def work(@read, product, _opts), do: product
 
-        def do_work(@unread, %{filepath: filepath} = product, _opts) do
+        def work(@unread, %{filepath: filepath} = product, _opts) do
           %{product | file_contents: File.read(filepath)}
         end
       end
@@ -156,12 +154,12 @@ Using the same use case from above let's implement this pipeline using _producti
         @read "read"
 
         # Block invalid start state
-        def do_determine_state(%{file_contents: nil}, _opts), do: raise "file_contents cannot be nil"
+        def prepare(%{file_contents: nil}, _opts), do: raise "file_contents cannot be nil"
 
         # Valid start states
-        def do_determine_state(_product, _opts), do: @read
+        def prepare(_product, _opts), do: @read
 
-        def do_work(@read, product, _opts) do 
+        def work(@read, product, _opts) do
           :beam_lib.chunks(binary, :abstract_code)
           |> process_chunks( product )
         end
@@ -180,12 +178,12 @@ Using the same use case from above let's implement this pipeline using _producti
         @chunks_extracted "chunks_extracted"
 
         # Block invalid start state
-        def do_determine_state(%{code_chunks: nil}, _opts), do: raise "code_chunks cannot be nil"
+        def prepare(%{code_chunks: nil}, _opts), do: raise "code_chunks cannot be nil"
 
         # Valid start states
-        def do_determine_state(%{code_chunks: _}, _opts), do: @chunks_extracted
+        def prepare(%{code_chunks: _}, _opts), do: @chunks_extracted
 
-        def do_work(@chunks_extracted, %{code_chunks: code_chunks} = product, _opts) do 
+        def work(@chunks_extracted, %{code_chunks: code_chunks} = product, _opts) do
           %{product | code_chunks: wrap(code_chunks)}
         end
 
