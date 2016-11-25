@@ -265,7 +265,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
   1. Add productive to your list of dependencies in `mix.exs`:
 
         def deps do
-          [{:productive, "~> 0.0.1"}]
+          [{:productive, "~> 0.1.0"}]
         end
 
   2. Ensure productive is started before your application:
