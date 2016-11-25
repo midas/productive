@@ -7,6 +7,17 @@ defmodule Productive.Step.Utils do
     |> Map.put( :errors, (errors ++ product.errors) )
   end
 
+  def add_halted_status( product, status ) do
+    product
+    |> Map.put( :halted_status, status )
+  end
+
+  def add_status_and_halt!( product, status ) do
+    product
+    |> add_halted_status( status )
+    |> halt!
+  end
+
   def add_errors_and_halt!( product, errors ) do
     product
     |> add_errors( errors )
