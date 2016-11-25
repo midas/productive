@@ -11,7 +11,29 @@ defmodule Productive.Mixfile do
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: description,
+     package: package,
      deps: deps]
+  end
+
+  defp description, do: "A workflow library allowing a process to be defined as steps.  Think of a more generic implementation of Plug."
+
+  defp package do
+    [
+        name: :productive,
+        files: [
+          "lib",
+          "mix.exs",
+          "README*",
+          "LICENSE*"
+        ],
+        maintainers: ["C. Jason Harrelson"],
+        licenses: ["MIT"],
+        links: %{
+          "GitHub" => "https://github.com/midas/productive",
+          "Docs" => "https://hexdocs.pm/productive/0.1.0"
+        }
+      ]
   end
 
   # Configuration for the OTP application
@@ -35,6 +57,8 @@ defmodule Productive.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [
+      {:ex_doc, ">= 0.0.0", only: :dev}
+    ]
   end
 end
