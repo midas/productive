@@ -49,7 +49,7 @@ defmodule Productive.Step do
                     #|> Enum.slice( 0, 100 )
                     |> Enum.join(".")
 
-        step_info "[STEP] #{step_name}"
+        step_info step_name
       end
 
       defp debug( msg ), do: apply( @logger, :debug, [msg] )
