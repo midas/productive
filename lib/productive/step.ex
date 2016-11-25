@@ -5,6 +5,8 @@ defmodule Productive.Step do
   defmacro __using__( opts ) do
     quote do
 
+      import Productive.Step.Utils
+
       @any "any"
       @logger unquote(opts[:logger])
 
