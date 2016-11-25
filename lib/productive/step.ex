@@ -14,13 +14,13 @@ defmodule Productive.Step do
         log_step __MODULE__, product
 
         product
-        |> determine_state( opts )
-        |> work( product, opts )
+        |> do_prepare( opts )
+        |> do_work( product, opts )
       end
 
-      def determine_state( product, opts \\ [] ) do
+      def do_prepare( product, opts \\ [] ) do
         try do
-          do_determine_state( product, opts )
+          prepare( product, opts )
         rescue
           FunctionClauseError -> raise StepError, "Error while resolving state for: #{inspect product}"
           MatchError          -> raise StepError, "Error while resolving state for: #{inspect product}"
@@ -29,20 +29,20 @@ defmodule Productive.Step do
 
       # Private ##########
 
-      defp work( state, product, opts \\ [] ) do
+      defp do_work( state, product, opts \\ [] ) do
         info "State resolved to: #{inspect state}"
         try do
-          do_work( state, product, opts )
+          work( state, product, opts )
         rescue
           FunctionClauseError -> raise StepError, "Invalid state (#{inspect state}) or product: #{inspect product}"
           MatchError          -> raise StepError, "Invalid state (#{inspect state}) or product: #{inspect product}"
         end
       end
 
-      #defp do_determine_state( _product, _opts ), do: raise("You must implement the do_determine_state function(s)")
-      def do_determine_state( _recipe, _opts ), do: @any
+      #defp prepare( _product, _opts ), do: raise("You must implement the determine_state function(s)")
+      def prepare( _recipe, _opts ), do: @any
 
-      defp do_work( _state, _product, _opts ), do: raise("You must implement the do_work function(s)")
+      defp work( _state, _product, _opts ), do: raise("You must implement the work function(s)")
 
       defp log_step( module, product \\ %{} ) do
         step_name = Module.split( __MODULE__ )
@@ -60,8 +60,8 @@ defmodule Productive.Step do
       defp step_info( msg ), do: apply( @logger, :step_info, [msg] )
 
       defoverridable [
-        do_determine_state: 2,
-        do_work: 3
+        prepare: 2,
+        work: 3
       ]
 
     end
