@@ -1,4 +1,4 @@
-defmodule Productive.Process do
+defmodule Productive.Pipeline do
 
   defmacro __using__( opts ) do
     quote do
@@ -27,21 +27,33 @@ defmodule Productive.Process do
 
       defp halted?( product, opts \\ [] ), do: product.halted
 
+      defp process_halted( %{halted_status: halted_status, errors: []} = product, _opts ) do
+        {halted_status, product}
+      end
+
       defp process_halted( product, opts ), do: {:error, product.errors}
 
-      defp process_result( product, opts ), do: product
+      defp process_result( product, opts ), do: {:ok, product}
 
       defp info( msg ), do: apply( @logger, :info, [msg] )
+
+      defp log_use_case( module, state \\ %{} ) do
+        pipeline_name = Module.split( __MODULE__ )
+                        |> Enum.slice( 1, 100 )
+                        |> Enum.join(".")
+
+        info "Responding as use case: #{pipeline_name}"
+      end
 
       defoverridable [
         process_halted: 2,
         process_result: 2
       ]
 
-      import Productive.Process
+      import Productive.Pipeline
 
       Module.register_attribute(__MODULE__, :steps, accumulate: true)
-      @before_compile Productive.Process
+      @before_compile Productive.Pipeline
 
     end
   end
