@@ -7,7 +7,8 @@ defmodule Productive.Pipeline do
 
       def call( product, opts \\ [] ) do
         product =
-          Enum.reduce_while( steps, product, fn(step, product) ->
+          Enum.reduce_while( steps, product, fn({step, step_opts}, product) ->
+            opts = Keyword.merge( opts, step_opts )
             product = apply( step, :call, [product, opts] )
             if product.halted do
               {:halt, product}
@@ -70,18 +71,11 @@ defmodule Productive.Pipeline do
         unquote(Enum.reverse(steps))
       end
     end
-
- end
-
-  defmacro step(step) do
-    quote do
-      @steps unquote(step)
-    end
   end
 
-  defmacro steps(steps) do
+  defmacro step(step, opts \\ []) do
     quote do
-      @steps unquote(steps)
+      @steps unquote({step, opts})
     end
   end
 
