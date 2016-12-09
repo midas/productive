@@ -35,8 +35,7 @@ defmodule Productive.Step do
       defp work( _state, _product, _opts ), do: raise("You must implement the work function(s)")
 
       defp log_step( module, product \\ %{} ) do
-        step_name = Module.split( __MODULE__ )
-                    |> Enum.join(".")
+        step_name = inspect( __MODULE__ )
 
         step_info step_name
       end
