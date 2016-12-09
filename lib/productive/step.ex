@@ -48,6 +48,7 @@ defmodule Productive.Step do
       defp step_info( msg ), do: apply( @logger, :step_info, [msg] )
 
       defoverridable [
+        log_step: 2,
         prepare: 2,
         work: 3
       ]
