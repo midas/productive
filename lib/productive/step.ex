@@ -19,24 +19,15 @@ defmodule Productive.Step do
       end
 
       def do_prepare( product, opts \\ [] ) do
-        try do
-          prepare( product, opts )
-        rescue
-          FunctionClauseError -> raise StepError, "Error while resolving state for: #{inspect product}"
-          MatchError          -> raise StepError, "Error while resolving state for: #{inspect product}"
-        end
+        prepare( product, opts )
       end
 
       # Private ##########
 
       defp do_work( state, product, opts \\ [] ) do
         info "State resolved to: #{inspect state}"
-        try do
-          work( state, product, opts )
-        rescue
-          FunctionClauseError -> raise StepError, "Invalid state (#{inspect state}) or product: #{inspect product}"
-          MatchError          -> raise StepError, "Invalid state (#{inspect state}) or product: #{inspect product}"
-        end
+
+        work( state, product, opts )
       end
 
       #defp prepare( _product, _opts ), do: raise("You must implement the determine_state function(s)")
