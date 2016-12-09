@@ -25,7 +25,7 @@ defmodule Productive.Step do
       # Private ##########
 
       defp do_work( state, product, opts \\ [] ) do
-        info "State resolved to: #{inspect state}"
+        state_info( inspect( state ))
 
         work( state, product, opts )
       end
@@ -45,7 +45,8 @@ defmodule Productive.Step do
       defp error( msg ), do: apply( @logger, :error, [msg] )
       defp warn( msg ),  do: apply( @logger, :warn, [msg] )
 
-      defp step_info( msg ), do: apply( @logger, :step_info, [msg] )
+      defp step_info( msg ),  do: apply( @logger, :step_info,  [msg] )
+      defp state_info( msg ), do: apply( @logger, :state_info, [msg] )
 
       defoverridable [
         log_step: 2,
