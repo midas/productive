@@ -30,14 +30,12 @@ defmodule Productive.Step do
         work( state, product, opts )
       end
 
-      #defp prepare( _product, _opts ), do: raise("You must implement the determine_state function(s)")
       def prepare( _recipe, _opts ), do: @any
 
       defp work( _state, _product, _opts ), do: raise("You must implement the work function(s)")
 
       defp log_step( module, product \\ %{} ) do
         step_name = Module.split( __MODULE__ )
-                    #|> Enum.slice( 0, 100 )
                     |> Enum.join(".")
 
         step_info step_name
