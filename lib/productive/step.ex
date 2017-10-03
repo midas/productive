@@ -1,7 +1,5 @@
 defmodule Productive.Step do
 
-  alias Productive.StepError
-
   defmacro __using__( opts ) do
     quote do
 
