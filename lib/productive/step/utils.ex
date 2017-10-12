@@ -15,13 +15,13 @@ defmodule Productive.Step.Utils do
   def add_status_and_halt!( product, status ) do
     product
     |> add_halted_status( status )
-    |> halt!
+    |> halt!()
   end
 
   def add_errors_and_halt!( product, errors ) do
     product
     |> add_errors( errors )
-    |> halt!
+    |> halt!()
   end
 
   def halt!( product ) do

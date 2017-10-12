@@ -7,7 +7,7 @@ defmodule Productive.Pipeline do
 
       def call( product, opts \\ [] ) do
         product =
-          Enum.reduce_while( steps, product, fn({step, step_opts}, product) ->
+          Enum.reduce_while( steps(), product, fn({step, step_opts}, product) ->
             opts = Keyword.merge( opts, step_opts )
             product = apply( step, :call, [product, opts] )
             if product.halted do
